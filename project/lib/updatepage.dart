@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Updatepage extends StatefulWidget {
@@ -9,6 +10,14 @@ class Updatepage extends StatefulWidget {
 
 class _UpdatepageState extends State<Updatepage> {
   TextEditingController _task = TextEditingController();
+  final CollectionReference todo =
+      FirebaseFirestore.instance.collection("Todos");
+
+  void edit(id) {
+    todo.doc(id).update({'task': _task.text});
+    Navigator.pushNamedAndRemoveUntil(context, "/main", (route) => false);
+  }
+
   @override
   Widget build(BuildContext context) {
     List data = ModalRoute.of(context)?.settings.arguments as List;
@@ -61,7 +70,11 @@ class _UpdatepageState extends State<Updatepage> {
                   backgroundColor: Colors.black,
                   padding: EdgeInsets.only(
                       top: 20, bottom: 20, left: 15, right: 15)),
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  edit(data[1]);
+                });
+              },
               child: Text(
                 "Save",
                 style: TextStyle(color: Colors.white),

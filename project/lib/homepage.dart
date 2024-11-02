@@ -136,71 +136,74 @@ class _HomepageState extends State<Homepage> {
                 itemBuilder: (context, index) {
                   final DocumentSnapshot documentSnapshot =
                       snapshots.data!.docs[index];
-                  return GestureDetector(
-                    onLongPress: () {},
-                    child: Container(
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.only(left: 10, right: 10, top: 20),
-                      width: MediaQuery.of(context).size.width,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: Colors.grey[100],
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 5,
-                            spreadRadius: 0,
-                            color: Colors.grey,
-                            offset: Offset(5, 5),
-                          ),
-                        ],
-                      ),
-                      child: ListTile(
-                        title: Text(
-                          documentSnapshot["task"],
+                  return Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(left: 10, right: 10, top: 20),
+                    width: MediaQuery.of(context).size.width,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.grey[100],
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 5,
+                          spreadRadius: 0,
+                          color: Colors.grey,
+                          offset: Offset(5, 5),
                         ),
-                        onLongPress: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                backgroundColor: Colors.grey[300],
-                                content: Text(
-                                  "Do you want to delete this task?",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                  ),
+                      ],
+                    ),
+                    child: ListTile(
+                      title: Text(
+                        documentSnapshot["task"],
+                      ),
+                      onLongPress: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              backgroundColor: Colors.grey[300],
+                              content: Text(
+                                "Do you want to delete this task?",
+                                style: TextStyle(
+                                  color: Colors.black,
                                 ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {},
-                                    child: Text("Delete"),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {},
-                                    child: Text("Cancel"),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                        trailing: IconButton(
-                          onPressed: () {
-                            List<String> datas = [
-                              documentSnapshot["task"],
-                              documentSnapshot.id
-                            ];
-                            Navigator.pushNamed(
-                              context,
-                              "/update",
-                              arguments: datas,
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () async {
+                                    await Todos.doc(documentSnapshot.id)
+                                        .delete();
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text("Delete"),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text("Cancel"),
+                                ),
+                              ],
                             );
                           },
-                          icon: Icon(
-                            Icons.edit,
-                            size: 21,
-                          ),
+                        );
+                      },
+                      trailing: IconButton(
+                        onPressed: () {
+                          List<String> datas = [
+                            documentSnapshot["task"],
+                            documentSnapshot.id
+                          ];
+                          Navigator.pushNamed(
+                            context,
+                            "/update",
+                            arguments: datas,
+                          );
+                        },
+                        icon: Icon(
+                          Icons.edit,
+                          size: 21,
                         ),
                       ),
                     ),
