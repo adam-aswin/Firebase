@@ -176,13 +176,19 @@ class _HomepageState extends State<Homepage> {
                                         .delete();
                                     Navigator.pop(context);
                                   },
-                                  child: Text("Delete"),
+                                  child: Text(
+                                    "Delete",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
                                 ),
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  child: Text("Cancel"),
+                                  child: Text(
+                                    "Cancel",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
                                 ),
                               ],
                             );

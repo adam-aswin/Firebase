@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class Loginpage extends StatefulWidget {
   const Loginpage({super.key});
@@ -16,6 +17,23 @@ class _LoginpageState extends State<Loginpage> {
   Future logIn() async {
     await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _email.text.trim(), password: _password.text.trim());
+  }
+
+  Future signInWithGoogle() async {
+    try {
+      final firebaseauth = await FirebaseAuth.instance;
+      final googleservices = await GoogleSignIn();
+      final googleuser = await googleservices.signIn();
+      final GoogleSignInAuthentication? googleAuth =
+          await googleuser?.authentication;
+      final cred = GoogleAuthProvider.credential(
+          accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
+      final user = await firebaseauth.signInWithCredential(cred);
+      print("helooooooo");
+      print(googleuser);
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -143,7 +161,7 @@ class _LoginpageState extends State<Loginpage> {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
-                        padding: EdgeInsets.fromLTRB(125, 18, 125, 18)),
+                        padding: EdgeInsets.fromLTRB(100, 0, 100, 0)),
                     onPressed: logIn,
                     child: Text(
                       "Login",
@@ -153,7 +171,18 @@ class _LoginpageState extends State<Loginpage> {
                     ),
                   ),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * .24,
+                    height: 40,
+                  ),
+                  IconButton(
+                    onPressed: signInWithGoogle,
+                    icon: Image.asset(
+                      "./lib/icons/google.png",
+                      height: 35,
+                      width: 35,
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * .14,
                   ),
                   Center(
                     child: TextButton(
