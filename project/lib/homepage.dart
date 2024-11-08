@@ -132,7 +132,7 @@ class _HomepageState extends State<Homepage> {
             stream: Todos.orderBy("task").snapshots(),
             builder: (context, snapshots) {
               return ListView.builder(
-                itemCount: snapshots.data!.docs.length,
+                itemCount: 0,
                 itemBuilder: (context, index) {
                   final DocumentSnapshot documentSnapshot =
                       snapshots.data!.docs[index];

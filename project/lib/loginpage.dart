@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -13,6 +14,7 @@ class _LoginpageState extends State<Loginpage> {
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
   bool obs = true;
+  CollectionReference User = FirebaseFirestore.instance.collection("User");
 
   Future logIn() async {
     await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -31,6 +33,13 @@ class _LoginpageState extends State<Loginpage> {
       final user = await firebaseauth.signInWithCredential(cred);
       print("helooooooo");
       print(googleuser);
+      final data = {
+        "name":googleuser!.displayName,
+        "email":googleuser.email,
+        "photo":googleuser.photoUrl,
+        "id":googleuser.id,
+      };
+      User.add(data);
     } catch (e) {
       print(e);
     }
